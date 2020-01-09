@@ -1,0 +1,16 @@
+- name: jenkins-wechat
+  image: docker.io/jenkinszh/jenkins-zh:latest
+  exposes:
+  - host: 8080
+    container: 8080
+  volumes:
+  - host: /tmp/jenkins
+    container: /var/jenkins_home
+- name: jenkins-mirror-proxy
+  image: docker.io/jenkinszh/mirror-proxy
+  exposes:
+    - host: 8080
+      container: 8080
+  volumes:
+    - host: /tmp/jenkins
+      container: /var/jenkins_home
