@@ -1,5 +1,5 @@
 - name: jenkins-wechat
-  image: docker.io/jenkinszh/jenkins-zh:latest
+  image: docker.io/surenpi/jenkins-wechat
   exposes:
   - host: 8080
     container: 8080
@@ -10,7 +10,4 @@
   image: docker.io/jenkinszh/mirror-proxy
   exposes:
     - host: 8080
-      container: 8080
-  volumes:
-    - host: /tmp/jenkins
-      container: /var/jenkins_home
+      container: 7070
