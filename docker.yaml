@@ -8,6 +8,12 @@
     container: /var/jenkins_home
 - name: jenkins-mirror-proxy
   image: docker.io/jenkinszh/mirror-proxy
+  volumes:
+  - host: /var/rootCA
+    container: /rootCA
+  - host: /var/data/update-center-mirror
+    container: /data
   exposes:
-    - host: 8080
-      container: 7070
+    - host: 7070
+      container: 7071
+  args: --cert /rootCA/updates.jenkins-zh.cn.pem --key /rootCA/updates.jenkins-zh.cn.key --enable-lts
