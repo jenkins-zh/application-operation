@@ -1,5 +1,5 @@
 - name: jenkins-wechat
-  image: docker.io/surenpi/jenkins-wechat
+  image: docker.io/surenpi/jenkins-wechat:aaa2fb4
   exposes:
   - host: 45678
     container: 18080
