@@ -1,8 +1,8 @@
 - name: jenkins-wechat
   image: docker.io/surenpi/jenkins-wechat
   exposes:
-  - host: 8080
-    container: 8080
+  - host: 45678
+    container: 18080
   volumes:
   - host: /tmp/jenkins
     container: /var/jenkins_home
