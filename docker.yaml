@@ -7,7 +7,7 @@
   - host: /tmp/jenkins
     container: /var/jenkins_home
 - name: jenkins-mirror-proxy
-  image: docker.io/jenkinszh/mirror-proxy
+  image: docker.io/jenkinszh/mirror-proxy:dev-bea8325
   volumes:
   - host: /var/rootCA
     container: /rootCA
