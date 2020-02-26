@@ -17,3 +17,4 @@
     - host: 7070
       container: 7071
   args: --cert /rootCA/updates.jenkins-zh.cn.pem --key /rootCA/updates.jenkins-zh.cn.key --enable-lts
+  # docker run -d --name jenkins-mirror-proxy -v /var/rootCA:/rootCA -v /var/data/update-center-mirror:/data --restart always -p 7070:7071 jenkinszh/mirror-proxy:dev-bea8325 --cert /rootCA/updates.jenkins-zh.cn.pem --key /rootCA/updates.jenkins-zh.cn.key --enable-lts
