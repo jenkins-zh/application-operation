@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  jenkins-nginx:
+    image: nginx:latest
+    command: ["nginx", "-g", "'daemon off;'", "-c", "/tmp/default"]
+    restart: on-failure
+    ports:
+      - "80:80"
+    volumes:
+      - "/tmp:/tmp"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+networks:
+  apps:

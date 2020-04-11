@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  jenkins-mirror-proxy:
+    image: docker.io/jenkinszh/mirror-proxy:dev-bea8325
+    command: ["--cert", "/rootCA/updates.jenkins-zh.cn.pem", "--key", "/rootCA/updates.jenkins-zh.cn.key", "--enable-lts"]
+    restart: on-failure
+    ports:
+      - "7070:7071"
+    volumes:
+      - "/var/rootCA:/rootCA"
+      - "/var/data/update-center-mirror:/data"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+networks:
+  apps:
