@@ -3,8 +3,8 @@ services:
   jenkins-wechat:
     image: docker.io/surenpi/jenkins-wechat:aaa2fb4
     restart: on-failure
-    ports:
-      - "45678:18080"
+    expose:
+      - "18080"
     volumes:
       - "/var/wechat/config:/config"
     networks:
