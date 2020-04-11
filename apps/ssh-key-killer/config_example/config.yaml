@@ -1,6 +1,11 @@
 ---
 hosts:
-  - host: Anxk@DESKTOP-CPMRO8
-    expire_time: 20200601
-  - host: Anxk@DESKTOP-CPMRO8X
+  - note: anxk # such as github id or name
     expire_time: 20200301
+    pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDVDqzIue64dZg9kYdnQiD9WkqXTPZL6HJpMI\
+      89oTKZp7AiN5FTp/a6F3w4gqmmqO/minmlhy7qjsUiOSvI7CuhoHC7euZmGFgV7SUUA1HpxkTiE4aRxnzv2XK6pqTu67\
+      CVb6NB+cCgJcwT9nGsvqGtfg22AfMjuvps7F0KUAEYRLvLQBIRx5NzRU3GIlu4k91+EI9M9UGGW86kMjQGn/kIMSuKlb\
+      34UKAAOs4IuU8pxb5Bi4Ku3zVJCA3Va/kv208j4VJCQVF6EQSCf/nBvbpoK0jexyJuY743dmQo+43SKJbYm+s0D+BzJi\
+      XEFg3I0FuQLuPfZpzF1GG5oxxtI/MgFMpdkjer4YsjYz4tkfhzLHVW6Op5z9Gl8tp811uJKiFR6yLYdqb6VopvS0RAr3\
+      XWFxVkg1oNViCUmsFFzsCgFBIock590uMjGcWySskI/lpxW3nEKTAJe/T0Q9eWe2gcYt3DokiH/f14mJ3sUkBkFb9yUU\
+      KcmpxeNyiRx4MveR0= Anxk@DESKTOP-CPMRO8R"
