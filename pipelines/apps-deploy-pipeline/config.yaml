@@ -1,0 +1,16 @@
+email:
+  basic_config: &basic_config
+    - to: an.xiaokang@jenkins-zh.cn
+      cc: an.xiaokang@jenkins-zh.cn
+      replyTo: an.xiaokang@jenkins-zh.cn
+      body: "this is a message from jenkins-zh"
+  success:
+    <<: *basic_config
+    subject: "apps was updated"
+  failed:
+    <<: *basic_config
+    subject: "failed to update apps"
+git:
+  url: "git@github.com:jenkins-zh/application-operation.git"
+  credentials_id:
+  folder: compose

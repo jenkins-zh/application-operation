@@ -1,0 +1,7 @@
+git:
+  url: "git@github.com:jenkins-zh/application-operation.git"
+  branch: "master"
+  folder: "config/ssh"
+  credentials_id:
+
+config_file: "application-operation/config/ssh/config.yaml"

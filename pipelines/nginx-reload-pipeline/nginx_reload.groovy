@@ -1,8 +1,7 @@
-//	verify nginx config file and reload nginx
-
+// verify nginx config file and reload it
 
 setJobProperties()
-def config = readYaml: "nginx_pipeline.yaml"
+def config = readYaml: "config.yaml"
 
 node () {
 	stage("prepare") {
@@ -36,13 +35,16 @@ def checkNginxConfig(config) {
 def reloadNginxConfig(config) {
 	def reloadFailed = false
 	try {
+		sh "mkdir -p /etc/nginx && cp -f ${config.nginx_config} /etc/nginx/nginx.current.default"
 		def container = locateContainer(config.image)
 		// if nginx container was not up, just up
 		if (container == "") {
-			sh "docker run --volume ${env.WORKSPACE}:${env.WORKSPACE} \
-				--publish 80:80 --detach ${config.image} nginx -g 'daemon off;' -c ${config.nginx_config}"
+			ws("${env.WORKSPACE}/${repoNameFromUrl(config.git.url)}/compose/jenkins-nginx") {
+				sh "docker-compose up -d"
+			}
+		} else {
+			sh "docker exec ${container} nginx -s reload"
 		}
-		sh "docker exec ${container} nginx -c ${config.nginx_config} -s reload"
 	}
 	catch(Exception e) {
 		reloadFailed = true
@@ -67,8 +69,9 @@ def repoNameFromUrl(url) {
 	def repoName = url.trim().split("/")[-1].split("\\.")[0]
 }
 
-// scmCheckout downloads git repo to `WORKSPACE/${repo name}`.
-def scmCheckout() {
+// scmCheckout downloads git repo to `WORKSPACE/${repoName}`, the branch is default to master.
+def scmCheckout(config) {
+	def branch = config.git.branch?:"master"
 	ws(env.WORKSPACE) {
 		checkout([$class: 'GitSCM', branches: [[name: "*/${config.git.branch}"]], 
 			extensions: [[$class: 'CheckoutOption', timeout: 5], 
@@ -78,6 +81,18 @@ def scmCheckout() {
 			userRemoteConfigs: [[credentialsId: config.git.credentials_id, url: config.git.url]]]
 		)
 	}
+}
+
+// shouldProceed proceeds the pipeline when files in the folder which are interested was changed in this commit.
+def shouldProceed(config) {
+	def folder = config.git.folder?:""
+	ws("${env.WORKSPACE}/${repoNameFromUrl(config.git.url)}") {
+		def out = sh(returnStdout: true, script: "git diff HEAD HEAD^ --name-only ${folder}")
+		if (out.trim() == "") {
+			return false
+		}
+	}
+	return true
 }
 
 // locateContainer finds container by image name.
@@ -91,16 +106,4 @@ def locateContainer(image) {
 		}
 	}
 	return ""
-}
-
-// shouldProceed proceeds the pipeline when `config.nginx_config` was changed in this commit.
-def shouldProceed(config) {
-	def file = config.nginx_config.trim().split("/")[1..-1].join("/")
-	ws("${env.WORKSPACE}/${repoNameFromUrl(config.git.url)}") {
-		def out = sh(returnStdout: true, script: "git diff HEAD HEAD^ --name-only ${file}")
-		if (out.trim() == "") {
-			return false
-		}
-	}
-	return true
 }

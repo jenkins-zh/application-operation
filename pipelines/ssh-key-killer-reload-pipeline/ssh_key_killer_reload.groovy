@@ -2,7 +2,7 @@
 
 
 setJobProperties()
-def config = readYaml: "ssh_key_killer_pipeline.yaml"
+def config = readYaml: "config.yaml"
 
 node () {
 	stage("prepare") {
@@ -44,8 +44,9 @@ def repoNameFromUrl(url) {
 	def repoName = url.trim().split("/")[-1].split("\\.")[0]
 }
 
-// scmCheckout downloads git repo to `WORKSPACE/${repo name}`.
-def scmCheckout() {
+// scmCheckout downloads git repo to `WORKSPACE/${repoName}`, the branch is default to master.
+def scmCheckout(config) {
+	def branch = config.git.branch?:"master"
 	ws(env.WORKSPACE) {
 		checkout([$class: 'GitSCM', branches: [[name: "*/${config.git.branch}"]], 
 			extensions: [[$class: 'CheckoutOption', timeout: 5], 
@@ -57,11 +58,11 @@ def scmCheckout() {
 	}
 }
 
-// shouldProceed proceeds the pipeline when `config.config_file` was changed in this commit.
+// shouldProceed proceeds the pipeline when files in the folder which are interested was changed in this commit.
 def shouldProceed(config) {
-	def file = config.config_file.trim().split("/")[1..-1].join("/")
+	def folder = config.git.folder?:""
 	ws("${env.WORKSPACE}/${repoNameFromUrl(config.git.url)}") {
-		def out = sh(returnStdout: true, script: "git diff HEAD HEAD^ --name-only ${file}")
+		def out = sh(returnStdout: true, script: "git diff HEAD HEAD^ --name-only ${folder}")
 		if (out.trim() == "") {
 			return false
 		}
