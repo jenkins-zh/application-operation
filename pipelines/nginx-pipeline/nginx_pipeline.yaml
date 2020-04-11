@@ -1,0 +1,27 @@
+email:
+  basic_config: &basic_config
+    - to: an.xiaokang@jenkins-zh.cn
+      cc: an.xiaokang@jenkins-zh.cn
+      replyTo: an.xiaokang@jenkins-zh.cn
+      body: "this is a message from jenkins-zh"
+  success:
+    <<: *basic_config
+    subject: "nginx was reload"
+    
+  failed:
+    <<: *basic_config
+    subject: "failed to reload nginx"
+
+git:
+  # url of git repo which contains nginx config
+  url:
+  branch:
+  # jenkins credentials id for this git repo
+  credentials_id:
+
+# nginx docker image
+image: "nginx:latest"
+
+# nginx file in git repo, e.g. with https://github.com/anxk/tmp/a=folder/nginx.conf
+# the nginx_config is tmp/a_folder/nginx.conf
+nginx_config: ""
