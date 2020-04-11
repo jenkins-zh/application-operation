@@ -23,10 +23,3 @@ Nginx 采用容器部署，配置更新流程如下：
 
 * 用户审计
   记录用户 ip 和 操作记录
-
-### TODO
-
-* 运维相关代码库创建 application-operations、私有仓库创建
-* docker 安装配置、jenkins agent 创建、Nginx 服务部署
-* 微信机器人、镜像代理部署（compose）
-* 流水线重构，将可复用部分移入 shared library

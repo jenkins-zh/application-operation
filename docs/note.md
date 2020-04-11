@@ -31,21 +31,10 @@
    source  /etc/profile
    ```
 
-3. 比较隐私的文件
-
-   1. `nginx 配置`
-   2. `ssh-key-killer 授权信息`
-
 4. 用户授权公钥定时检测和吊销
 
    ```shell
    00 03 * * * python -m ssh-key-killer # crontab
-   ```
-
-5. Nginx 容器
-
-   ```shell
-   docker run -d -v /tmp:/tmp -p 80:80 nginx nginx -g 'daemon off;' -c /tmp/default
    ```
 
    
