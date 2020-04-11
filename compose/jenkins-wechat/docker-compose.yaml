@@ -2,6 +2,7 @@ version: "3.7"
 services:
   jenkins-wechat:
     image: docker.io/surenpi/jenkins-wechat:aaa2fb4
+    container_name: jenkins-wechat
     restart: on-failure
     expose:
       - "18080"
