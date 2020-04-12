@@ -34,7 +34,7 @@ def checkConfig(config) {
 def refreshConfig(config) {
 	def path = "/etc/ssh-key-killer"
 	ws(env.WORKSPACE) {
-		sh "mkdir -p ${path} && cp ${config.config_file} ${path}/config.yaml"
+		sh "mkdir -p ${path} && cp -f ${config.config_file}/* ${path}/"
 		sh "python -m ssh-key-killer"
 	}
 }

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import glob
 import os.path
 import stat
 
@@ -11,6 +12,16 @@ def load_config(config):
             return yaml.safe_load(f)
     except Exception as e:
         raise e
+
+
+def load_all_config(config_dir):
+    merged = {"hosts": []}
+    files = glob.glob('**/*.yaml', recursive=True)
+    for file in files:
+        config = load_config(file).get("hosts")
+        if config is not None:
+            merged["hosts"].extend(config)
+    return merged
 
 
 def scan_authorized_keys():

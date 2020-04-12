@@ -11,7 +11,7 @@ if platform.system() != 'Linux':
 from .killer import Killer
 
 parser = argparse.ArgumentParser(description='ssh key killer')
-parser.add_argument('--config', dest='config', metavar='configfile', default="/etc/ssh-key-killer/config.yaml", type=str)
+parser.add_argument('--config-dir', dest='config_dir', metavar='config_dir', default="/etc/ssh-key-killer/", type=str)
 args = parser.parse_args()
 
-Killer(configfile=args.config).invalid()
+Killer(configfile=args.config_dir).invalid()

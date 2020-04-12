@@ -3,12 +3,12 @@ from datetime import datetime
 
 from .authorized_keys import AuthorizedKeys
 from .logger import logger
-from .utils import load_config, scan_authorized_keys
+from .utils import load_all_config, scan_authorized_keys
 
 
 class Killer:
     def __init__(self, configfile):
-        self.config = load_config(configfile)
+        self.config = load_all_config(configfile)
 
     def get_invalid_hosts(self):
         invalid_pub_key = []

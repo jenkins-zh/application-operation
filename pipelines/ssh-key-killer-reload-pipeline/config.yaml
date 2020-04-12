@@ -4,4 +4,4 @@ git:
   folder: "config/ssh"
   credentials_id:
 
-config_file: "application-operation/config/ssh/config.yaml"
+config_file: "application-operation/config/ssh"
