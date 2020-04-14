@@ -28,14 +28,16 @@ def setJobProperties() {
 
 // verifies the config file.
 def checkConfig(config) {
-	readYaml: config.config_file
+	ws(env.WORKSPACE) {
+		sh "python3 -m SshKeyKiller -c ${config.config_file} --verify"
+	}
 }
 
 def refreshConfig(config) {
 	def path = "/etc/ssh-key-killer"
 	ws(env.WORKSPACE) {
 		sh "mkdir -p ${path} && cp -f ${config.config_file}/* ${path}/"
-		sh "python -m ssh-key-killer"
+		sh "python -m SshKeyKiller"
 	}
 }
 
