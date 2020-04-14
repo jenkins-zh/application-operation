@@ -1,7 +1,9 @@
 git:
   url: "git@github.com:jenkins-zh/application-operation.git"
   branch: "master"
-  folder: "config/ssh"
+  folders: 
+    - "config/ssh"
+    - "apps/ssh-key-killer"
   credentials_id:
 
 config_file: "application-operation/config/ssh"

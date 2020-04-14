@@ -13,4 +13,5 @@ email:
 git:
   url: "git@github.com:jenkins-zh/application-operation.git"
   credentials_id:
-  folder: compose
+  folders:
+    - compose

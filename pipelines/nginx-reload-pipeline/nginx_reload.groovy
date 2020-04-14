@@ -85,9 +85,9 @@ def scmCheckout(config) {
 
 // shouldProceed proceeds the pipeline when files in the folder which are interested was changed in this commit.
 def shouldProceed(config) {
-	def folder = config.git.folder?:""
+	def folders = config.git.folders?:[""]
 	ws("${env.WORKSPACE}/${repoNameFromUrl(config.git.url)}") {
-		def out = sh(returnStdout: true, script: "git diff HEAD HEAD^ --name-only ${folder}")
+		def out = sh(returnStdout: true, script: "git diff HEAD HEAD^ --name-only ${folders.join(' ')}")
 		if (out.trim() == "") {
 			return false
 		}

@@ -7,18 +7,14 @@ email:
   success:
     <<: *basic_config
     subject: "nginx was reloaded"
-    
   failed:
     <<: *basic_config
     subject: "failed to reload nginx"
-
 git:
   url: "git@github.com:jenkins-zh/application-operation.git"
   credentials_id:
-  folder: config/nginx
+  folders:
+    - config/nginx
 
 image: "nginx:1.17.9-alpine"
-
-# nginx file in git repo, e.g. with https://github.com/anxk/tmp/a=folder/nginx.conf
-# the nginx_config is tmp/a_folder/nginx.conf
 nginx_config: "application-operation/config/nginx/nginx.conf"
