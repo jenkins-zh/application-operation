@@ -11,7 +11,9 @@ email:
     <<: *basic_config
     subject: "failed to update apps"
 git:
-  url: "git@github.com:jenkins-zh/application-operation.git"
-  credentials_id:
+  url: "https://github.com/anxk/application-operation.git"
+  branch: anxk0411
   folders:
     - compose
+node:
+  ucloud

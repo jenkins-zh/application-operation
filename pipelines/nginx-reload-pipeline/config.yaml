@@ -11,10 +11,12 @@ email:
     <<: *basic_config
     subject: "failed to reload nginx"
 git:
-  url: "git@github.com:jenkins-zh/application-operation.git"
-  credentials_id:
+  url: "https://github.com/anxk/application-operation.git"
+  branch: anxk0411
   folders:
     - config/nginx
 
 image: "nginx:1.17.9-alpine"
-nginx_config: "application-operation/config/nginx/nginx.conf"
+nginx_config: "application-operation/config/nginx/nginx.current.conf"
+
+node: ucloud

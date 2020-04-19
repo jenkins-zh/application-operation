@@ -2,9 +2,9 @@
 
 
 setJobProperties()
-def config = readYaml: "config.yaml"
+def config = readYaml file: "config.yaml"
 
-node () {
+node (config.node) {
 	stage("prepare") {
 		scmCheckout(config)
 	}
@@ -18,49 +18,38 @@ node () {
 	}
 }
 
-def setJobProperties() {
-	properties([buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '100')),
-		disableConcurrentBuilds(),
-		disableResume(),
-		pipelineTriggers([githubPush()])]
-	)
-}
-
 // verifies the config file.
 def checkConfig(config) {
-	ws(env.WORKSPACE) {
-		sh "python3 -m SshKeyKiller -c ${config.config_file} --verify"
-	}
+	sh "python3 -m SshKeyKiller -c ${config.config_file} --verify"
 }
 
 def refreshConfig(config) {
 	def path = "/etc/ssh-key-killer"
-	ws(env.WORKSPACE) {
-		sh "mkdir -p ${path} && cp -f ${config.config_file}/* ${path}/"
-		sh "python -m SshKeyKiller"
-	}
+	sh "mkdir -p ${path} && cp -f ${config.config_file}/* ${path}/"
+	sh "python -m SshKeyKiller"
 }
 
-// repoNameFromUrl extracts the repo name from a git url (git or http).
+// this job should be non-concurrent.
+def setJobProperties() {
+	properties([buildDiscarder(logRotator(daysToKeepStr: '30', numToKeepStr: '100')),
+		disableConcurrentBuilds(),
+		disableResume()]
+	)
+}
+
+// repoNameFromUrl return the repo name from a git url (git or http).
 def repoNameFromUrl(url) {
-	def repoName = url.trim().split("/")[-1].split("\\.")[0]
+	return url.trim().split("/")[-1].split("\\.")[0]
 }
 
-// scmCheckout downloads git repo to `WORKSPACE/${repoName}`, the branch is default to master.
+// scmCheckout downloads git repo to `${env.WORKSPACE}/${repoName}`, the branch is default to master.
 def scmCheckout(config) {
 	def branch = config.git.branch?:"master"
-	ws(env.WORKSPACE) {
-		checkout([$class: 'GitSCM', branches: [[name: "*/${config.git.branch}"]], 
-			extensions: [[$class: 'CheckoutOption', timeout: 5], 
-			[$class: 'CloneOption', honorRefspec: true, depth: 2, noTags: true],
-				[$class: 'CleanBeforeCheckout'],
-				[$class: 'RelativeTargetDirectory', relativeTargetDir: repoNameFromUrl(config.git.url)]], 
-			userRemoteConfigs: [[credentialsId: config.git.credentials_id, url: config.git.url]]]
-		)
-	}
+	sh "rm -rf ${repoNameFromUrl(config.git.url)}"
+	sh "git clone ${config.git.url} --depth=2 --no-tags --branch ${branch}"
 }
 
-// shouldProceed proceeds the pipeline when files in the folder which are interested was changed in this commit.
+// shouldProceed proceeds the pipeline when files in the folders which are interested was changed in this commit.
 def shouldProceed(config) {
 	def folders = config.git.folders?:[""]
 	ws("${env.WORKSPACE}/${repoNameFromUrl(config.git.url)}") {
@@ -68,6 +57,6 @@ def shouldProceed(config) {
 		if (out.trim() == "") {
 			return false
 		}
+		return true
 	}
-	return true
 }

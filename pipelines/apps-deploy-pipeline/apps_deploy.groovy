@@ -1,9 +1,9 @@
 // verify docker-compose files located in `compose/<app-name>/` and start/restart apps in need.
 
 setJobProperties()
-def config = readYaml: "config.yaml"
+def config = readYaml file: "config.yaml"
 
-node () {
+node (config.node) {
 	stage("prepare") {
 		scmCheckout(config)
 	}
@@ -15,15 +15,6 @@ node () {
 			updateApps(config)
 		}
 	}
-}
-
-// this job should be non-concurrent.
-def setJobProperties() {
-	properties([buildDiscarder(logRotator(daysToKeepStr: '7', numToKeepStr: '100')),
-		disableConcurrentBuilds(),
-		disableResume(),
-		pipelineTriggers([githubPush()])]
-	)
 }
 
 // checkConfig verifies config file.
@@ -46,7 +37,7 @@ def updateApps(config) {
 	}
 }
 
-// walk walks `compose tree` and executes closure for every `docker-compose.yaml`.
+// walk walks `compose` folder and executes closure for every `docker-compose.yaml`.
 def walk(config, closure) {
 	ws("${env.WORKSPACE}/${repoNameFromUrl(config.git.url)}/compose") {
 		def files = findFiles(glob: '**/*/docker-compose.yaml')
@@ -58,26 +49,27 @@ def walk(config, closure) {
 	}
 }
 
-// repoNameFromUrl extracts the repo name from a git url (git or http).
-def repoNameFromUrl(url) {
-	def repoName = url.trim().split("/")[-1].split("\\.")[0]
+// this job should be non-concurrent.
+def setJobProperties() {
+	properties([buildDiscarder(logRotator(daysToKeepStr: '30', numToKeepStr: '100')),
+		disableConcurrentBuilds(),
+		disableResume()]
+	)
 }
 
-// scmCheckout downloads git repo to `WORKSPACE/${repoName}`, the branch is default to master.
+// repoNameFromUrl return the repo name from a git url (git or http).
+def repoNameFromUrl(url) {
+	url.trim().split("/")[-1].split("\\.")[0]
+}
+
+// scmCheckout downloads git repo to `${env.WORKSPACE}/${repoName}`, the branch is default to master.
 def scmCheckout(config) {
 	def branch = config.git.branch?:"master"
-	ws(env.WORKSPACE) {
-		checkout([$class: 'GitSCM', branches: [[name: "*/${config.git.branch}"]], 
-			extensions: [[$class: 'CheckoutOption', timeout: 5], 
-			[$class: 'CloneOption', honorRefspec: true, depth: 2, noTags: true],
-				[$class: 'CleanBeforeCheckout'],
-				[$class: 'RelativeTargetDirectory', relativeTargetDir: repoNameFromUrl(config.git.url)]], 
-			userRemoteConfigs: [[credentialsId: config.git.credentials_id, url: config.git.url]]]
-		)
-	}
+	sh "rm -rf ${repoNameFromUrl(config.git.url)}"
+	sh "git clone ${config.git.url} --depth=2 --no-tags --branch ${branch}"
 }
 
-// shouldProceed proceeds the pipeline when files in the folder which are interested was changed in this commit.
+// shouldProceed proceeds the pipeline when files in the folders which are interested was changed in this commit.
 def shouldProceed(config) {
 	def folders = config.git.folders?:[""]
 	ws("${env.WORKSPACE}/${repoNameFromUrl(config.git.url)}") {
@@ -85,15 +77,20 @@ def shouldProceed(config) {
 		if (out.trim() == "") {
 			return false
 		}
+		return true
 	}
-	return true
 }
 
 // sendMail sends mail according to the value of onFailed.
 def sendMail(config, onFailed) {
-	def msg = config.mail.failed
-	if (!onFail) {
-		msg = config.mail.success
+	def msg = config.email.failed
+	if (!onFailed) {
+		msg = config.email.success
 	}
-	mail(msg)
+	try {
+		mail(msg)
+	}
+	catch(Exception e) {
+		println "failed to send mail"
+	}
 }
