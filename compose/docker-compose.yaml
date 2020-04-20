@@ -7,6 +7,7 @@ services:
     restart: on-failure
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - "/etc/nginx/nginx.current.conf:/etc/nginx/nginx.conf"
     networks:
@@ -17,14 +18,13 @@ services:
         max-size: "10m"
         max-file: "5"
   jenkins-wechat:
-    # image: docker.io/surenpi/jenkins-wechat:aaa2fb4
-    image: surenpi/jenkins-wechat:mock # for test
+    image: docker.io/surenpi/jenkins-wechat:aaa2fb4
     container_name: jenkins-wechat
     restart: on-failure
     expose:
       - "18080"
-    # volumes:
-    #   - "/var/wechat/config:/config"
+    volumes:
+      - "/var/wechat/config:/config"
     networks:
       - apps
     logging:
@@ -33,16 +33,15 @@ services:
         max-size: "10m"
         max-file: "5"
   jenkins-mirror-proxy:
-    # image: docker.io/jenkinszh/mirror-proxy:dev-bea8325
-    image: jenkinszh/mirror-proxy:mock  # for test
+    image: docker.io/jenkinszh/mirror-proxy:dev-bea8325
     container_name: jenkins-mirror-proxy
-    # command: ["--cert", "/rootCA/updates.jenkins-zh.cn.pem", "--key", "/rootCA/updates.jenkins-zh.cn.key", "--enable-lts"]
+    command: ["--cert", "/rootCA/updates.jenkins-zh.cn.pem", "--key", "/rootCA/updates.jenkins-zh.cn.key", "--enable-lts"]
     restart: on-failure
     expose:
       - "7071"
-    # volumes:
-    #   - "/var/rootCA:/rootCA"
-    #   - "/var/data/update-center-mirror:/data"
+    volumes:
+      - "/var/rootCA:/rootCA"
+      - "/var/data/update-center-mirror:/data"
     networks:
       - apps
     logging:
