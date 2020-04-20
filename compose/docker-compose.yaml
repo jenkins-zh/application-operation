@@ -1,0 +1,54 @@
+version: "3.7"
+services:
+  jenkins-nginx:
+    image: nginx:1.17.9-alpine
+    container_name: jenkins-nginx
+    command: "nginx -g 'daemon off;'"
+    restart: on-failure
+    ports:
+      - "80:80"
+    volumes:
+      - "/etc/nginx/nginx.current.conf:/etc/nginx/nginx.conf"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+  jenkins-wechat:
+    # image: docker.io/surenpi/jenkins-wechat:aaa2fb4
+    image: surenpi/jenkins-wechat:mock # for test
+    container_name: jenkins-wechat
+    restart: on-failure
+    expose:
+      - "18080"
+    # volumes:
+    #   - "/var/wechat/config:/config"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+  jenkins-mirror-proxy:
+    # image: docker.io/jenkinszh/mirror-proxy:dev-bea8325
+    image: jenkinszh/mirror-proxy:mock  # for test
+    container_name: jenkins-mirror-proxy
+    # command: ["--cert", "/rootCA/updates.jenkins-zh.cn.pem", "--key", "/rootCA/updates.jenkins-zh.cn.key", "--enable-lts"]
+    restart: on-failure
+    expose:
+      - "7071"
+    # volumes:
+    #   - "/var/rootCA:/rootCA"
+    #   - "/var/data/update-center-mirror:/data"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+networks:
+  apps:
