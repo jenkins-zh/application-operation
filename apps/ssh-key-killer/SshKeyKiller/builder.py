@@ -6,7 +6,7 @@ from .logger import logger
 from .utils import load_config, scan_authorized_keys
 
 
-class Killer:
+class :
     """
     Killer remove the expired authorized pub keys.
     """

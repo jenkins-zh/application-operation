@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   jenkins-nginx:
-    image: nginx:1.17.9-alpine
+    image: nginx:1.18
     container_name: jenkins-nginx
     command: "nginx -g 'daemon off;'"
     restart: on-failure
@@ -10,6 +10,8 @@ services:
       - "443:443"
     volumes:
       - "/etc/nginx/nginx.current.conf:/etc/nginx/nginx.conf"
+      - "/etc/nginx/updates.jenkins-zh.cn.key:/etc/nginx/updates.jenkins-zh.cn.key"
+      - "/etc/nginx/updates.jenkins-zh.cn.pem:/etc/nginx/updates.jenkins-zh.cn.pem"
     networks:
       - apps
     logging:
@@ -17,6 +19,13 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
+    healthcheck:
+      test: "curl -f http://localhost/status | grep ok"
+      interval: 2m
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   jenkins-wechat:
     image: docker.io/surenpi/jenkins-wechat:aaa2fb4
     container_name: jenkins-wechat
@@ -32,6 +41,13 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
+    healthcheck:
+      test: "curl -f http://localhost:18080/status | grep ok"
+      interval: 2m
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
   jenkins-mirror-proxy:
     image: docker.io/jenkinszh/mirror-proxy:dev-bea8325
     container_name: jenkins-mirror-proxy
@@ -49,5 +65,11 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
+    healthcheck:
+      test: "curl -k -f https://localhost:7071/json-servers"
+      interval: 2m
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 networks:
   apps:

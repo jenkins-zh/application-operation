@@ -1,7 +1,8 @@
 // deploy apps in need.
 
 setJobProperties()
-def config = readYaml file: "config.yaml"
+
+def config = readConfig()
 
 node (config.node) {
 	stage("prepare") {
@@ -110,4 +111,11 @@ def shouldProceed(config) {
 // setUnstable sets the build result to another status.
 def setUnstable() {
 	currentBuild.result = "UNSTABLE"
+}
+
+// readConfig reads pipeline config.
+def readConfig() {
+	def text = readTrusted 'pipelines/apps-deploy-pipeline/config.yaml'
+	def config = readYaml text: text
+	return config
 }
