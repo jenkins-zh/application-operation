@@ -75,7 +75,6 @@ services:
   jenkins-nexus3:
     image: sonatype/nexus3
     container_name: jenkins-nexus3
-    command: ["--cert", "/home/ops/repo.jenkins-zh.cn.pem", "--key", "/home/ops/repo.jenkins-zh.cn.key", "--enable-lts"]
     restart: on-failure
     expose:
       - "8081"
