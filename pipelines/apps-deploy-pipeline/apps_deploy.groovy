@@ -27,22 +27,27 @@ def checkConfig(config) {
 		// verifies docker-compose config
 		sh "docker-compose -f ${config.compose_file} config"
 		// verifies nginx config
-		sh """docker run -v ${pwd()}:${pwd()}
-			${nginxImage(config)} nginx -t -c ${pwd()}/${config.nginx_config}"""
+		sh """docker run -v ${pwd()}:${pwd()} \
+			-v "/etc/nginx:/etc/nginx" \
+			${nginxImage(config)} sh -c ' \
+			echo 127.0.0.1 jenkins-wechat >> /etc/hosts && \
+			echo 127.0.0.1 jenkins-mirror-proxy >> /etc/hosts && \
+			nginx -t -c ${pwd()}/${config.nginx_config}'"""
 	}
 }
 
 // copyConfig copies config files to specific host paths
 def copyConfig(config) {
 	// copy nginx config
-	sh "mkdir -p /etc/nginx && cp -f ${config.nginx_config} /etc/nginx/nginx.current.conf"
+	sh "mkdir -p /etc/nginx && cp -f ${repoName(config)}/${config.nginx_config} /etc/nginx/nginx.current.conf"
 }
 
 // updateApps updates apps in need.
 def updateApps(config) {
+	def force = Boolean.valueOf(env.forceDeploy)? "--force-recreate":""
 	def reloadFailed = false
 	try {
-		sh "docker-compose up -d"
+		sh "docker-compose -f ${repoName(config)}/${config.compose_file} up -d ${force}"
 	}
 	catch(Exception e) {
 		reloadFailed = true
