@@ -71,5 +71,24 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+  jenkins-nexus3:
+    image: sonatype/nexus3
+    container_name: jenkins-nexus3
+    command: ["--cert", "/home/ops/repo.jenkins-zh.cn.pem", "--key", "/home/ops/repo.jenkins-zh.cn.key", "--enable-lts"]
+    restart: on-failure
+    expose:
+      - "8081"
+    volumes:
+      - "/home/ops/repo.jenkins-zh.cn.pem:/home/ops/repo.jenkins-zh.cn.pem"
+      - "/home/ops/repo.jenkins-zh.cn.key:/home/ops/repo.jenkins-zh.cn.key"
+      - "/var/data/nexus3:/nexus-data"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 networks:
   apps:
