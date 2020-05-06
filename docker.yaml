@@ -8,7 +8,7 @@
     container: /var/jenkins_home
 # docker run --name jenkins-wechat -d --restart=always -p 45678:18080 -v /var/wechat/config:/config surenpi/jenkins-wechat:aaa2fb4
 - name: jenkins-mirror-proxy
-  image: docker.io/jenkinszh/mirror-proxy:dev-bea8325
+  image: docker.io/jenkinszh/mirror-proxy:dev-8d6c377
   volumes:
   - host: /var/rootCA
     container: /rootCA
