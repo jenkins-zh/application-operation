@@ -32,6 +32,7 @@ def checkConfig(config) {
 			${nginxImage(config)} sh -c ' \
 			echo 127.0.0.1 jenkins-wechat >> /etc/hosts && \
 			echo 127.0.0.1 jenkins-mirror-proxy >> /etc/hosts && \
+			echo 127.0.0.1 jenkins-nexus3 >> /etc/hosts && \
 			nginx -t -c ${pwd()}/${config.nginx_config}'"""
 	}
 }
