@@ -1,0 +1,93 @@
+version: "3.7"
+services:
+  jenkins-nginx:
+    image: nginx:1.18
+    container_name: jenkins-nginx
+    command: "nginx -g 'daemon off;'"
+    restart: on-failure
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/etc/nginx/nginx.current.conf:/etc/nginx/nginx.conf"
+      - "/etc/nginx/updates.jenkins-zh.cn.key:/etc/nginx/updates.jenkins-zh.cn.key"
+      - "/etc/nginx/updates.jenkins-zh.cn.pem:/etc/nginx/updates.jenkins-zh.cn.pem"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    healthcheck:
+      test: "curl -f http://localhost/status | grep ok"
+      interval: 2m
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  jenkins-wechat:
+    image: docker.io/surenpi/jenkins-wechat:aaa2fb4
+    container_name: jenkins-wechat
+    restart: on-failure
+    expose:
+      - "18080"
+    volumes:
+      - "/var/wechat/config:/config"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    healthcheck:
+      test: "curl -f http://localhost:18080/status | grep ok"
+      interval: 2m
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  jenkins-mirror-proxy:
+    image: docker.io/jenkinszh/mirror-proxy:dev-bea8325
+    container_name: jenkins-mirror-proxy
+    command: ["--cert", "/rootCA/updates.jenkins-zh.cn.pem", "--key", "/rootCA/updates.jenkins-zh.cn.key", "--enable-lts"]
+    restart: on-failure
+    expose:
+      - "7071"
+    volumes:
+      - "/var/rootCA:/rootCA"
+      - "/var/data/update-center-mirror:/data"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    healthcheck:
+      test: "curl -k -f https://localhost:7071/json-servers"
+      interval: 2m
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  jenkins-nexus3:
+    image: sonatype/nexus3
+    container_name: jenkins-nexus3
+    restart: on-failure
+    expose:
+      - "8081"
+    volumes:
+      - "/home/ops/repo.jenkins-zh.cn.pem:/home/ops/repo.jenkins-zh.cn.pem"
+      - "/home/ops/repo.jenkins-zh.cn.key:/home/ops/repo.jenkins-zh.cn.key"
+      - "/var/data/nexus3:/nexus-data"
+    networks:
+      - apps
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+networks:
+  apps:
