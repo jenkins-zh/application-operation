@@ -121,7 +121,7 @@ def setUnstable() {
 
 // readConfig reads pipeline config.
 def readConfig() {
-	def text = readTrusted 'pipelines/apps-deploy-pipeline/config.yaml'
+	def text = readTrusted 'config.yaml'
 	def config = readYaml text: text
 	return config
 }
