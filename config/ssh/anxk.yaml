@@ -1,7 +1,7 @@
 hosts:
   - annotation: anxk # such as github id or something else
     user: ops
-    expire_date: 20200701
+    expire_date: 20200901
     pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDVDqzIue64dZg9kYdnQiD9WkqXTPZL6HJpMI\
       89oTKZp7AiN5FTp/a6F3w4gqmmqO/minmlhy7qjsUiOSvI7CuhoHC7euZmGFgV7SUUA1HpxkTiE4aRxnzv2XK6pqTu67\
       CVb6NB+cCgJcwT9nGsvqGtfg22AfMjuvps7F0KUAEYRLvLQBIRx5NzRU3GIlu4k91+EI9M9UGGW86kMjQGn/kIMSuKlb\
