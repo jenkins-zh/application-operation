@@ -1,0 +1,23 @@
+hosts:
+  - annotation: yJunS
+    user: ops
+    expire_date: 20200901
+    pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDf5g64vA7y6HgukVtK33D\
+      vYwrdeyn3nQumBczTTcqP/fJFqBEYlRas+sza8v6Y2Ldmv+IBClYEVYtPUY5F2KEScz\
+      EbwgY9ojTKVnDz/owCPwLFbNLXXN3+aKEdiug32Ybeo637rntWcp4J7TD1iQysIuEIQ\
+      Gi5lmvJ2GaHOuuYU68879WYZvbEi9JWS1qblMFBP/YUdIY9JSWlvccB5cCEw7xCRXXxE\
+      BfTV+R3l7ru+vHUz5XnNfgoE0qqVcyz6Oc2lZe9h9GV5CPAwhb3CNIBQEvAhU6oXoE5a\
+      gxZhVlEkm8t0aTZNiHQbet1JTu9E8F+iUYI72j12U34596rmCaPBLtThsZP3bmuzwAAj\
+      6OaYSuUnYeXdaXvjkBBvkln/yE2NV0LhggOHMViFqrVWGqOAlL/NWUG/uSwsqaJF8SNA\
+      J14QKjFhy4k1sUXxIptc0BN+bbgpn3XnftllWtX6A5kryie6ttBK1QsPKJ8A7U89TbVd\
+      VInPir3zjmMCvVhz5k= yjuns@yJunSs-MacBook-Pro"
+  - annotation: yJunS
+    user: ops
+    expire_date: 20200901
+    pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZ4NlNBBogx7UtY7jANkQ\
+      85qFZaUMB03s5d5UZrzW8Z9Ki548u944FhspZhAUHpsvLWNNiSHfFo8xJW73FH+fRen\
+      Aj2eje8Tpdur2vP6vT5ALaGKhU3oG2NYVTQEgw7JQ8KNAwD4npwzL9kTT/mAiJi5N65\
+      qWlS9py4SO2ksUy6iveVgbC9G0qV0vsvmPUebtKZeQl3eNrKuYu56/kd7euDGnuQFiq\
+      wxQFBDv6ZYx4zA2kHehDtCXukVxNyk3xfENNjfNoLBWGJ6k38TNJ6WYLuXdjth1lbZE\
+      cRBJaez3pRtAtZA1ARCHpBU/8L72XAt3kS0Hxa7KfcO//0DwsMAOT root@49e4daa5\
+      7d94"
