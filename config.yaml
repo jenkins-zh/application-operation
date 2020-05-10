@@ -9,6 +9,7 @@ git:
 
 nginx_config: config/nginx/nginx.current.conf
 compose_file: compose/docker-compose.yaml
+ssh_config: config/ssh
 
 email:
   basic_config: &basic_config

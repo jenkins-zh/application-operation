@@ -32,7 +32,10 @@ def checkConfig(config) {
 			${nginxImage(config)} sh -c ' \
 			echo 127.0.0.1 jenkins-wechat >> /etc/hosts && \
 			echo 127.0.0.1 jenkins-mirror-proxy >> /etc/hosts && \
+			echo 127.0.0.1 jenkins-nexus3 >> /etc/hosts && \
 			nginx -t -c ${pwd()}/${config.nginx_config}'"""
+		// verifies ssh pub key config
+		sh "python3 -m sshmanager --verify"
 	}
 }
 
@@ -48,6 +51,7 @@ def updateApps(config) {
 	def reloadFailed = false
 	try {
 		sh "docker-compose -f ${repoName(config)}/${config.compose_file} up -d ${force}"
+		sh "python3 -m sshmanager"
 	}
 	catch(Exception e) {
 		reloadFailed = true
@@ -120,7 +124,7 @@ def setUnstable() {
 
 // readConfig reads pipeline config.
 def readConfig() {
-	def text = readTrusted 'pipelines/apps-deploy-pipeline/config.yaml'
+	def text = readTrusted 'config.yaml'
 	def config = readYaml text: text
 	return config
 }

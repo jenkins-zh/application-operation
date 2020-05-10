@@ -1,0 +1,16 @@
+hosts:
+  - annotation: LinuxSuRen
+    user: ops
+    expire_date: 20200901
+    pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCmt0rpmvCrKqPxAj82\
+      4wsNDMy4MoYMoMyQmrpEM+c6MKdPIyaIq4HzudB/dAog4OTiPUQvXuTv0P4dpVhl\
+      54c0JaADtsUoeWmGeRaFGDeSysSFapOKbCTsd3XRz/3xftjjhmWFd+Kvhq8j5MI/\
+      a85TT6Aq8OT+qO0OU9OQJpl/ndHnIxAvKQPGEEmdG+YdAIrxJn7s0BXw/ojpBdYM\
+      ZvfHiVDoAtGUtJHjHhyo2OC0U073kcGVx2agPzbVRle0xjwUzdD/vjE2x6apGXes\
+      eSnP6Xnd59pAlLWv3J7xiW2OOBHUCUWFmrHYWHqMDAX3JOZ+W+BTGZNYme0TE7QC\
+      1JlPt0ibMIZAnkZ6iR86bS+G+gHbBHQ887eNY+Kvj0fMEG0q09IjoEVEmBx/DmUQb\
+      3Mq0Vp44srHgDlkYD4kquppp9CHIF3LG9D/D4rkXmXshWVcv5FsAbo66CW3jTFaSq\
+      m1SzCAz01FPJ8TAcWuPSwvi8dOgZGBha4U+DKQ15D5YZO6OBfwqVtjnc7HU+S2tWe\
+      wrXQT556YuiOT7R3cCva3GRrTtTEE7EqQRK7TDzP4jDYec0ap5nH56SSmOeMJgwdY\
+      kgzmPIkoZjDANBiX1OZe+xefXa+4+emnfeGwKM+mW7EXRXRaSJYX7HDtkngazgYlQ\
+      QJbsYnUbYYgSh4LFx02SQ== rick@jenkins-zh.cn"
