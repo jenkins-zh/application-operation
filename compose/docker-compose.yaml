@@ -49,7 +49,7 @@ services:
       start_period: 40s
 
   jenkins-mirror-proxy:
-    image: docker.io/jenkinszh/mirror-proxy:dev-bea8325
+    image: docker.io/jenkinszh/mirror-proxy:dev-a41fb94
     container_name: jenkins-mirror-proxy
     command: ["--cert", "/rootCA/updates.jenkins-zh.cn.pem", "--key", "/rootCA/updates.jenkins-zh.cn.key", "--enable-lts"]
     restart: on-failure
@@ -66,14 +66,14 @@ services:
         max-size: "10m"
         max-file: "5"
     healthcheck:
-      test: "curl -k -f https://localhost:7071/json-servers"
+      test: "curl -k -f https://localhost:7071/status | grep ok"
       interval: 2m
       timeout: 10s
       retries: 3
       start_period: 40s
 
   jenkins-nexus3:
-    image: sonatype/nexus3
+    image: sonatype/nexus3:3.22.0
     container_name: jenkins-nexus3
     restart: on-failure
     expose:
