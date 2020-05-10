@@ -6,12 +6,17 @@ import stat
 
 import yaml
 
-from .errors import InvalidConfigException
+from sshmanager.errors import InvalidConfigException
+
+
+def load_yaml(filename):
+    with open(filename) as f:
+        return yaml.safe_load(f)
 
 
 def load_config(filename):
     """
-    load config file or all the config files if filename represents a directory.
+    loads a config file or all the config files if filename represents a directory.
     """
     s = os.stat(filename).st_mode
     if stat.S_ISREG(s):
@@ -19,26 +24,26 @@ def load_config(filename):
     elif stat.S_ISDIR(s):
         return load_all_config(filename)
     else:
-        raise InvalidConfigException("invalid config file")
+        raise InvalidConfigException
 
 
 def load_one_config(config_file):
     """
-    load and verify the config_file.
+    loads and verifies the config file.
     """
     try:
         with open(config_file) as f:
             data = yaml.safe_load(f)
     except Exception:
-        raise
+        raise InvalidConfigException(config_file)
     if not verify_config(data):
-        raise InvalidConfigException("invalid config file")
+        raise InvalidConfigException(config_file)
     return data
 
 
 def load_all_config(config_dir):
     """
-    load all the config files in config_dir.
+    loads all the config files in config dir.
     """
     merged = {"hosts": []}
     files = glob.glob(os.path.join(config_dir, '**/*.y*ml'), recursive=True)
@@ -49,33 +54,18 @@ def load_all_config(config_dir):
     return merged
 
 
-def scan_authorized_keys():
-    """
-    return all the authorized_keys files by searching paths of `/home` and `/root`.
-    """
-    files = []
-    authorized_keys_file = ".ssh/authorized_keys"
-    files_tmp = [os.path.join("/home", user, authorized_keys_file) for user in os.listdir("/home")]
-    files_tmp.append(os.path.join("/root", authorized_keys_file))
-    for file in files_tmp:
-        try:
-            s = os.stat(file).st_mode
-            if stat.S_ISREG(s):
-                files.append(file)
-        except OSError:
-            pass
-    return files
-
-
 def verify_config(config):
     """
-    verify the configuration.
+    verifies the config.
     """
     hosts = config.get("hosts")
     if hosts is None:
         return False
     for host in hosts:
-        if host.get("annotation") is None or host.get("pub_key") is None:
+        if host.get("annotation") is None or \
+                host.get("pub_key") is None or \
+                host.get("user") is None or \
+                host.get("expire_date") is None:
             return False
         try:
             datetime.strptime(str(host.get("expire_date")), "%Y%m%d")
