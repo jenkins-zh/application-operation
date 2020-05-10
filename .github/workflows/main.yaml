@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Set up Python 3.8
+      with:
+        python-version: '3.8'
+
+    - name: prepare environment
+      run: pip3 install setuptools && pip install docker pyyaml
+
+    - name: check existence of docker image in compose/docker-compose.yaml
+      run: |
+        import yaml
+        import docker
+        f = open("compose/docker-compose.yaml")
+        data = yaml.safe_load(f)
+        f.close()
+        client = docker.APIClient()
+        response = [client.inspect_distribution(x.get("image")) for x in data.get("services").values()]
+        print(response)
+      shell: python
