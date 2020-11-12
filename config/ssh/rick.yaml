@@ -1,7 +1,7 @@
 hosts:
   - annotation: LinuxSuRen
     user: ops
-    expire_date: 20200901
+    expire_date: 20210901
     pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCmt0rpmvCrKqPxAj82\
       4wsNDMy4MoYMoMyQmrpEM+c6MKdPIyaIq4HzudB/dAog4OTiPUQvXuTv0P4dpVhl\
       54c0JaADtsUoeWmGeRaFGDeSysSFapOKbCTsd3XRz/3xftjjhmWFd+Kvhq8j5MI/\
