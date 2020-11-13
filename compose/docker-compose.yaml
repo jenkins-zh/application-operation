@@ -10,6 +10,8 @@ services:
       - "443:443"
     volumes:
       - "/etc/nginx/nginx.current.conf:/etc/nginx/nginx.conf"
+      - "/etc/nginx/repo.jenkins-zh.cn.key:/etc/nginx/repo.jenkins-zh.cn.key"
+      - "/etc/nginx/repo.jenkins-zh.cn.pem:/etc/nginx/repo.jenkins-zh.cn.pem"
       - "/etc/nginx/updates.jenkins-zh.cn.key:/etc/nginx/updates.jenkins-zh.cn.key"
       - "/etc/nginx/updates.jenkins-zh.cn.pem:/etc/nginx/updates.jenkins-zh.cn.pem"
     networks:
